@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
+import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
@@ -38,12 +39,17 @@ public class NaumenSmpTests {
         $("#gwt-debug-apply").click();
 
         // Проверяем открыто ли бокове меню, если нет, то открываем
-        SelenideElement element = $("#gwt-debug-navContent"); //
-        if (element.getCssValue("display").equals("none")) { //
-            $("#gwt-debug-c5af86c7-6e4d-a611-55f9-d3fc8dcc236c").click(); //
+        SelenideElement element = $("#gwt-debug-navContent");
+        if (element.getCssValue("display").equals("none")) {
+            $("#gwt-debug-c5af86c7-6e4d-a611-55f9-d3fc8dcc236c").click();
         }
-
+        // Проверяем добавилась ли карточка в избранное
         $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']", title))).shouldBe(visible.because("Такой карточки нет в разделе избранных")); // Проверяем, что карточка создалась
+
+        // Возвращаем систему в исходное состояние
+        $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']", title))).hover();
+        $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']/../../div[@class='GFIRBY5J3']/span", title))).click();
+        $("#gwt-debug-yes").click();
 
         // Выходим из учетной записи
         $("#gwt-debug-logout").click();
@@ -54,7 +60,7 @@ public class NaumenSmpTests {
         Configuration.browser = "chrome";
         Configuration.timeout = 13000; // Устанавливаем таймер 13 секунд
         Selenide.open("http://5.181.254.246:8080/sd"); //Откроем страницу для тестов
-        Configuration.browserSize = "1920*992"; // Установимм размер окна браузера
+        Configuration.browserSize = "1920*992"; // Установим размер окна браузера
 
         // Ввод данных для входа в учетную запись
         $("#username").click();
@@ -68,12 +74,12 @@ public class NaumenSmpTests {
         $("#gwt-debug-favorite").shouldBe(visible.because("Не найдена кнопка добавления в избранные, возможно не удалось войти в учетную запись"));
         $("#gwt-debug-favorite").click();
         $("#gwt-debug-itemTitle-value").type(String.valueOf(title));
-        $("#gwt-debug-apply").click(); //
+        $("#gwt-debug-apply").click();
 
         // Проверяем открыто ли бокове меню6 если нет, то открываем
-        SelenideElement element = $("#gwt-debug-navContent"); //
-        if (element.getCssValue("display").equals("none")) { //
-            $("#gwt-debug-c5af86c7-6e4d-a611-55f9-d3fc8dcc236c").click(); //
+        SelenideElement element = $("#gwt-debug-navContent");
+        if (element.getCssValue("display").equals("none")) {
+            $("#gwt-debug-c5af86c7-6e4d-a611-55f9-d3fc8dcc236c").click();
         }
 
         // Удаляем карточку страницы при наличии
@@ -81,6 +87,8 @@ public class NaumenSmpTests {
         $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']", title))).hover();
         $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']/../../div[@class='GFIRBY5J3']/span", title))).click();
         $("#gwt-debug-yes").click();
+        $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']", title)))
+                .shouldNot(appear.because("Карточка должна быть удалена из избранных"));
 
         // Выходим из учетной записи
         $("#gwt-debug-logout").click();
