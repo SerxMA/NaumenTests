@@ -44,7 +44,7 @@ public class NaumenSmpTests {
             $("#gwt-debug-c5af86c7-6e4d-a611-55f9-d3fc8dcc236c").click();
         }
         // Проверяем добавилась ли карточка в избранное
-        $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']", title))).shouldBe(visible.because("Такой карточки нет в разделе избранных")); // Проверяем, что карточка создалась
+        $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']", title))).shouldBe(visible.because("Такой карточки нет в разделе избранных"));
 
         // Возвращаем систему в исходное состояние
         $(byXpath(String.format("//a[@id='gwt-debug-title']/div[text()='%s']", title))).hover();
